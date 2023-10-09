@@ -1,0 +1,36 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  padding-left: calc(50% - 500px);
+  padding-right: calc(50% - 500px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  background-color: black;
+  color: white;
+  margin-bottom: 40px;
+}
+.header__title {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.cart-button {
+  padding: 10px;
+}
+
+.goods-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.goods-item {
+  border: 1px solid black;
+  padding: 20px;
+}/*# sourceMappingURL=style.css.map */
