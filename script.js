@@ -15,12 +15,14 @@ class GoodsItem {
 }
 
 class GoodsList {
+  items = [];
+
   constructor() {
-    this.goods = [];
+    this.items = [];
   }
 
   fetchGoods() {
-    this.goods = [
+    this.items = [
       { title: 'Shirt', price: 150 },
       { title: 'Socks', price: 50 },
       { title: 'Jacket', price: 350 },
@@ -30,14 +32,26 @@ class GoodsList {
 
   render() {
     let listHtml = '';
-    this.goods.forEach(good => {
+    this.items.forEach(good => {
       const goodItem = new GoodsItem(good.title, good.price);
       listHtml += goodItem.render();
     });
     document.querySelector('.goods-list').innerHTML = listHtml;
+  }
+
+  calculateCost() {
+    return this.items.reduce((sum, item) => sum + item.price, 0);
+  }
+}
+
+class Cart {
+  constructor() {
+
   }
 }
 
 const list = new GoodsList();
 list.fetchGoods();
 list.render();
+
+console.log(list.calculateCost());
