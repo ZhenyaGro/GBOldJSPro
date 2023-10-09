@@ -1,13 +1,13 @@
 class GoodsItem {
-  constructor(title, price) {
-    this.title = title;
+  constructor(product_name, price) {
+    this.product_name = product_name;
     this.price = price;
   }
 
   render() {
     return `
       <div class="goods-item">
-        <h3>${this.title}</h3>
+        <h3>${this.product_name}</h3>
         <p>${this.price}</p>
       </div>
     `
@@ -21,19 +21,17 @@ class GoodsList {
     this.items = [];
   }
 
-  fetchGoods() {
-    this.items = [
-      { title: 'Shirt', price: 150 },
-      { title: 'Socks', price: 50 },
-      { title: 'Jacket', price: 350 },
-      { title: 'Shoes', price: 250 }
-    ]
+  fetchGoods(callback) {
+    service(url, (data) => {
+      this.items = data
+      callback();
+    });
   }
 
   render() {
     let listHtml = '';
     this.items.forEach(good => {
-      const goodItem = new GoodsItem(good.title, good.price);
+      const goodItem = new GoodsItem(good.product_name, good.price);
       listHtml += goodItem.render();
     });
     document.querySelector('.goods-list').innerHTML = listHtml;
@@ -44,14 +42,22 @@ class GoodsList {
   }
 }
 
-class Cart {
-  constructor() {
-
-  }
+function service(url, callback) {
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.onload = () => {
+    const result = JSON.parse(xhr.response);
+    callback(result);
+  };
+  xhr.send();
 }
 
+const URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const GOODS = '/catalogData.json';
+const url = `${URL}${GOODS}`
+
 const list = new GoodsList();
-list.fetchGoods();
-list.render();
+list.fetchGoods(() => list.render());
+
 
 console.log(list.calculateCost());
