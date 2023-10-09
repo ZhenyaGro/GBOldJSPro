@@ -22,9 +22,11 @@ class GoodsList {
   }
 
   fetchGoods(callback) {
-    service(url, (data) => {
-      this.items = data
-      callback();
+    return new Promise(resolve => {
+      service(url).then((data) => {
+        this.items = data
+        resolve();
+      });
     });
   }
 
@@ -43,13 +45,15 @@ class GoodsList {
 }
 
 function service(url, callback) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.onload = () => {
-    const result = JSON.parse(xhr.response);
-    callback(result);
-  };
-  xhr.send();
+  return new Promise((resolve) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = () => {
+      const result = JSON.parse(xhr.response);
+      resolve(result);
+    };
+    xhr.send();
+  });
 }
 
 const URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
@@ -57,7 +61,7 @@ const GOODS = '/catalogData.json';
 const url = `${URL}${GOODS}`
 
 const list = new GoodsList();
-list.fetchGoods(() => list.render());
+list.fetchGoods().then(() => list.render());
 
 
 console.log(list.calculateCost());
